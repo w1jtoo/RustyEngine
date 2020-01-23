@@ -33,7 +33,7 @@ impl<'a> ObjectRederer<'a> {
             shape: &shape,
             vertex_shader_src: vertex_shader_src,
             fragment_shader_src: fragment_shader_src,
-            geometry_shader: None,
+            geometry_shader: geometry_shader,
         }
     }
 }
@@ -47,7 +47,18 @@ pub struct Application<'a> {
 
 impl<'a> Application<'a> {
     pub fn run(&mut self) {
+        let mut t: f32 = 0.0;
+        let mut r: f32 = -0.9;
         while !self.closed {
+            // TODO: create abstruction with easy way animation addition
+            t += 0.02;
+            r += 0.02;
+            if t > 1.0 {
+                t = 0.0;
+            }
+            if r > 0.9 {
+                r *= -1.0;
+            }
             let mut target = self.display.draw();
             target.clear_color(0.0, 0.0, 1.0, 1.0);
             implement_vertex!(Vertex, position);
@@ -66,7 +77,7 @@ impl<'a> Application<'a> {
                         &vertex_buffer,
                         glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList),
                         &program,
-                        &glium::uniforms::EmptyUniforms,
+                        &uniform! { t: t, r: r },
                         &Default::default(),
                     )
                     .unwrap();

@@ -18,16 +18,25 @@ fn main() {
         render_objects: Vec::new(),
     };
 
-    let vertex1 = Vertex::new(1.0, 1.0);
-    let vertex2 = Vertex::new(0.0, 1.0);
-    let vertex3 = Vertex::new(1.0, 0.0);
+    let vertex1 = Vertex::new(0.3, 0.3);
+    let vertex2 = Vertex::new(0.0, -0.3);
+    let vertex3 = Vertex::new(0.3, 0.0);
     let shape = vec![vertex1, vertex2, vertex3];
 
     let vertex_shader = r#"
     #version 140
+
     in vec2 position;
+
+    uniform float t;
+    uniform float r;
+
+
     void main() {
-        gl_Position = vec4(position, 0.0, 1.0);
+        vec2 pos = position;
+        pos.x += r;
+        pos.t += t;
+        gl_Position = vec4(pos, 0.0, 1.0);
     }
 "#;
 
